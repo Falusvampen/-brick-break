@@ -485,12 +485,14 @@ function livesCounter() {
   }
 }
 
+let brickdestroyed = 0;
 // Score counter
 function scoreCounter() {
   let currentScore = parseInt(score.innerHTML.split(" ")[1]);
   currentScore++;
+  brickdestroyed++;
   score.innerHTML = "Score: " + currentScore;
-  if (currentScore === count) {
+  if (brickdestroyed === count) {
     alert("Nice Job, Press ENTER for next level");
     document.location.reload();
   }

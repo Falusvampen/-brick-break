@@ -346,9 +346,14 @@ function random() {
   return Math.random() < 0.1;
 }
 
+function randomNum() {
+  // return a random number between 1 and 3 as a string
+  return Math.floor(Math.random() * 3 + 1).toString();
+}
+
 let powerupExists = false;
 
-// Powerups
+// Powerups;
 function generatePowerup(x, y) {
   // brickRect = Brick.getBoundingClientRect();
 
@@ -358,11 +363,12 @@ function generatePowerup(x, y) {
     console.log(x, y);
 
     let powerup = document.createElement("div");
-    powerup.classList.add("powerup");
+    powerup.classList.add("powerup" + randomNum());
     powerup.style.left =
       x - gameScreenRect.left - powerup.offsetWidth / 2 + ballRadius + "px";
     powerup.style.top =
       y - gameScreenRect.top - powerup.offsetHeight / 2 + "px";
+
     gameScreen.appendChild(powerup);
 
     powerupExists = true;
@@ -370,6 +376,29 @@ function generatePowerup(x, y) {
     movePowerup(powerup);
   }
 }
+
+// function generatePowerup(x, y) {
+//   // brickRect = Brick.getBoundingClientRect();
+
+//   if (!powerupExists) {
+//     gameScreenRect = gameScreen.getBoundingClientRect();
+
+//     console.log(x, y);
+
+//     let powerup = document.createElement("div");
+//     powerup.classList.add("powerup" + randomNum());
+//     powerup.style.left =
+//       x - gameScreenRect.left - powerup.offsetWidth / 2 + ballRadius + "px";
+//     powerup.style.top =
+//       y - gameScreenRect.top - powerup.offsetHeight / 2 + "px";
+
+//     gameScreen.appendChild(powerup);
+
+//     powerupExists = true;
+
+//     movePowerup(powerup);
+//   }
+// }
 
 function movePowerup(powerup) {
   let powerupY = powerup.offsetTop;
@@ -396,31 +425,40 @@ function movePowerup(powerup) {
       powerupY + powerup.offsetHeight > paddle.offsetTop
     ) {
       //implement powerups here
+      doPowerup(powerup);
       powerup.remove();
       powerupExists = false;
-      doPowerup();
       sound("hit");
     }
   }
 }
 
-function doPowerup() {
-  let nb = Math.random();
-  if (nb < 0.33) {
+function doPowerup(powerup) {
+  // let nb = Math.random();
+  if (powerup.classList.contains("powerup1")) {
     //powerup #1 Add 1 more Life
     console.log("low");
     addOneLife();
   }
-  if (nb > 0.33 && nb < 0.66) {
-    //powerup #2 Add 1 more ball?
+  if (powerup.classList.contains("powerup2")) {
+    //powerup #2 Add 10 score
     console.log("mid");
+    addScore();
   }
-  if (nb > 0.66) {
+  if (powerup.classList.contains("powerup3")) {
     //powerup #3 Add 10 seconds to timer
     console.log("high");
     addTimer();
   }
 }
+
+// add 10 score to the player
+function addScore() {
+  let currentScore = parseInt(score.innerHTML.split(" ")[1]);
+  currentScore = currentScore + 10;
+  score.innerHTML = "Score: " + currentScore;
+}
+
 //adds 10 seconds to timer
 function addTimer() {
   let currentTimer = parseInt(timer.innerHTML.split(" ")[1]);

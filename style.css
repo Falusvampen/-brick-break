@@ -199,11 +199,27 @@ p {
   /* add more styles here */
 }
 
-.powerup {
+.powerup1 {
   position: absolute;
   width: 20px;
   height: 20px;
   background-color: rgb(18, 171, 177);
+  border: 1px solid #fff;
+  /* add more styles here */
+}
+.powerup2 {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: rgb(242, 210, 0);
+  border: 1px solid #fff;
+  /* add more styles here */
+}
+.powerup3 {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: rgb(179, 11, 225);
   border: 1px solid #fff;
   /* add more styles here */
 }

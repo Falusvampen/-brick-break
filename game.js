@@ -20,8 +20,8 @@ const powerup = document.getElementById("powerup");
 let paused = true;
 let introdone = false;
 
-
 const modal = document.getElementById("pauseModal");
+const howmodal = document.getElementById("howto");
 
 function showModal() {
   modal.style.display = "flex";
@@ -44,6 +44,19 @@ function restart() {
 function quit() {
   modal.style.display = "none";
   window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+}
+
+function howtoplay() {
+  howmodal.style.display = "flex";
+  modal.style.display = "none";
+}
+
+function howclose() {
+  howmodal.style.display = "none";
+  if (paused && introdone) {
+    showModal();
+  }
+  // modal.style.display = "none";
 }
 
 // -----------------------------------------------Bricks------------------------------------------------

@@ -19,17 +19,32 @@ const powerup = document.getElementById("powerup");
 
 let paused = true;
 let introdone = false;
-pause.addEventListener("click", function () {
-  if (pause.innerHTML === "Pause") {
-    pause.innerHTML = "Resume";
-    paused = true;
-  } else {
-    pause.innerHTML = "Pause";
-    paused = false;
-    moveBall();
-    movePowerup(document.querySelector(".powerup"));
-  }
-});
+
+
+const modal = document.getElementById("pauseModal");
+
+function showModal() {
+  modal.style.display = "flex";
+  paused = true;
+  clearInterval(timerInterval);
+}
+function resume() {
+  modal.style.display = "none";
+  paused = false;
+  moveBall();
+  movePowerup(document.querySelector(".powerup"));
+  startTimer();
+}
+
+function restart() {
+  modal.style.display = "none";
+  // Code to restart the game
+}
+
+function quit() {
+  modal.style.display = "none";
+  window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+}
 
 // -----------------------------------------------Bricks------------------------------------------------
 // Constants for brick dimensions and layout
@@ -217,6 +232,7 @@ function detectBallCollisions() {
   }
   // Ball hits the bottom
   if (ballY > gameScreen.offsetHeight - 35) {
+    sound("yoda.mp3");
     livesCounter();
     ballDirectionX = 1;
     ballDirectionY = -1;
@@ -268,7 +284,7 @@ function detectBrickCollisions(ballX, ballY) {
       ballRect.bottom > brickRect.top &&
       ballRect.top < brickRect.bottom
     ) {
-      sound("yoda.mp3");
+      sound("tap.wav");
       ballDirectionY = -ballDirectionY;
       // brick[i].style.display = "none";
       generatePowerup(brickRect.left, brickRect.top);
@@ -429,6 +445,8 @@ function scoreCounter() {
   }
 }
 
+let timerInterval;
+
 //Timer function removes one second from timer
 function timerCounter() {
   let currentTimer = parseInt(timer.innerHTML.split(" ")[1]);
@@ -442,7 +460,7 @@ function timerCounter() {
 
 //Starts timer and runs timerCounter function every second
 function startTimer() {
-  setInterval(timerCounter, 1000);
+  timerInterval = setInterval(timerCounter, 1000);
 }
 
 // Sound effects and music

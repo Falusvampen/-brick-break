@@ -81,12 +81,24 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 }
 
 .modal-content h2 {
   margin-top: 0;
   color: #ffffff;
   animation: fadeInOut 2s ease-in-out infinite;
+}
+
+.modal-content h1,
+h3,
+p {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  margin-top: 0;
+  color: #ffffff;
+  /* animation: fadeInOut 2s ease-in-out infinite; */
 }
 
 .modal-buttons {

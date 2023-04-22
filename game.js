@@ -235,8 +235,9 @@ function getDistance(ballX, ballY, x, y) {
 
 // Ball collision detection
 function detectBallCollisions() {
-  let ballX = ball.offsetLeft + 10;
-  let ballY = ball.offsetTop - 10;
+  const ballRadius = 10;
+  let ballX = ball.offsetLeft + ballRadius;
+  let ballY = ball.offsetTop - ballRadius;
 
   // Ball hits the top
   if (ballY < 0) {
@@ -244,7 +245,7 @@ function detectBallCollisions() {
     sound("wallhit.mp3");
   }
   // Ball hits the bottom
-  if (ballY > gameScreen.offsetHeight - 35) {
+  if (ballY >= gameScreen.offsetHeight - (ballRadius * 2 + 5)) {
     sound("yoda.mp3");
     livesCounter();
     ballDirectionX = 1;
@@ -252,17 +253,25 @@ function detectBallCollisions() {
     ballReleased = false;
   }
   // Ball hits the left
-  if (ballX < 10) {
+  if (ballX <= ballRadius) {
     ballDirectionX = 1;
     sound("wallhit.mp3");
   }
   // Ball hits the right
-  if (ballX > gameScreenWidth - 10) {
+  if (ballX >= gameScreenWidth - ballRadius) {
     ballDirectionX = -1;
-
     sound("wallhit.mp3");
   }
   // Ball hits the paddle
+  if (isBallCollidingWithPaddle(ballX, ballY)) {
+    sound("blaster.mp3");
+  }
+
+  // Ball hits a brick
+  detectBrickCollisions(ballX, ballY);
+}
+
+function isBallCollidingWithPaddle(ballX, ballY) {
   if (ballY + 30 > paddle.offsetTop && ballY + 30 < paddle.offsetTop + 10) {
     if (
       ballX + 20 > paddle.offsetLeft &&
@@ -280,38 +289,53 @@ function detectBallCollisions() {
     }
     sound("blaster.mp3");
   }
-
-  // Ball hits the brick
-  detectBrickCollisions(ballX, ballY);
 }
 
 // Brick collision detection
 function detectBrickCollisions(ballX, ballY) {
-  console.log(brick.length);
+  const ballRect = ball.getBoundingClientRect();
+
   for (let i = 0; i < brick.length; i++) {
     let brickRect = brick[i].getBoundingClientRect();
-    let ballRect = ball.getBoundingClientRect();
-    if (
-      ballRect.right > brickRect.left &&
-      ballRect.left < brickRect.right &&
-      ballRect.bottom > brickRect.top &&
-      ballRect.top < brickRect.bottom
-    ) {
+
+    if (isRectanglesColliding(ballRect, brickRect)) {
+      // Calculate the hit direction
+      const hitLeft = ballRect.right - brickRect.left;
+      const hitRight = brickRect.right - ballRect.left;
+      const hitTop = ballRect.bottom - brickRect.top;
+      const hitBottom = brickRect.bottom - ballRect.top;
+
+      const minHorizontal = Math.min(hitLeft, hitRight);
+      const minVertical = Math.min(hitTop, hitBottom);
+
+      // If horizontal collision is smaller, change X direction
+      if (minHorizontal < minVertical) {
+        ballDirectionX = -ballDirectionX;
+      } else {
+        // If vertical collision is smaller, change Y direction
+        ballDirectionY = -ballDirectionY;
+      }
+
       sound("tap.wav");
-      ballDirectionY = -ballDirectionY;
-      // brick[i].style.display = "none";
       generatePowerup(brickRect.left, brickRect.top);
       brick[i].remove();
-
-      // console.log(
-      //   brickRect.left,
-      //   brickRect.right,
-      //   brickRect.top,
-      //   brickRect.bottom
-      // );
       scoreCounter();
     }
   }
+}
+
+function isRectanglesColliding(rect1, rect2) {
+  return (
+    rect1.right >= rect2.left &&
+    rect1.left <= rect2.right &&
+    rect1.bottom >= rect2.top &&
+    rect1.top <= rect2.bottom
+  );
+}
+
+function playSound(soundFile) {
+  const audio = new Audio(soundFile);
+  audio.play();
 }
 
 // Move the ball

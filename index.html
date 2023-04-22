@@ -8,7 +8,7 @@
     <div id="welcome">
       <h1>Welcome to Brick Wars</h1>
       <div class="button">
-        <button class="btn-101" id="start-game-btn">
+        <button class="btn-101" id="start-game-btn" class="startthefight">
           START THE FIGHT
           <svg>
             <defs>
@@ -111,7 +111,7 @@
         <h2>Paused</h2>
         <div class="modal-buttons">
           <!-- <div class="modal-button"> -->
-          <button class="btn-101" id="start-game-btn" onclick="resume()">
+          <button class="btn-101" id="resume-game-btn" onclick="resume()">
             Resume
             <svg>
               <defs>
@@ -131,7 +131,7 @@
               <rect />
             </svg>
           </button>
-          <button class="btn-101" id="start-game-btn" onclick="restart()">
+          <button class="btn-101" id="restart-game-btn" onclick="restart()">
             Restart
             <svg>
               <defs>
@@ -151,7 +151,7 @@
               <rect />
             </svg>
           </button>
-          <button class="btn-101" id="start-game-btn" onclick="quit()">
+          <button class="btn-101" id="get-rick-rolled-game-btn" onclick="quit()">
             Quit
             <svg>
               <defs>
@@ -189,6 +189,26 @@
           <div id="score">Score: 0</div>
           <div id="lives">Lives: 3</div>
           <button id="pause-btn" onclick="showModal()">Pause</button>
+          <!-- <button class="btn-101" id="pause-game-btn" onclick="showModal()">
+            Pause
+            <svg>
+              <defs>
+                <filter id="glow">
+                  <fegaussianblur
+                    result="coloredBlur"
+                    stddeviation="5"
+                  ></fegaussianblur>
+                  <femerge>
+                    <femergenode in="coloredBlur"></femergenode>
+                    <femergenode in="coloredBlur"></femergenode>
+                    <femergenode in="coloredBlur"></femergenode>
+                    <femergenode in="SourceGraphic"></femergenode>
+                  </femerge>
+                </filter>
+              </defs>
+              <rect />
+            </svg>
+          </button> -->
         </div>
         <div id="pause-menu">
           <h2>Paused</h2>

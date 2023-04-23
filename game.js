@@ -92,6 +92,39 @@ function createBricks(levelData) {
         brick.style.left = col * (brickWidth + brickSpacing) + "px";
         grid[0].appendChild(brick);
       }
+      if (levelData[row][col] === 2) {
+        count++;
+        const brick = document.createElement("div");
+        brick.classList.add("brick");
+        brick.dataset.health = 2; // add remaining health
+        // change the style of the brick to become red
+        brick.style.backgroundColor = "red";
+        brick.style.top = row * (brickHeight + brickSpacing) + "px";
+        brick.style.left = col * (brickWidth + brickSpacing) + "px";
+        grid[0].appendChild(brick);
+      }
+      if (levelData[row][col] === 3) {
+        count++;
+        const brick = document.createElement("div");
+        brick.classList.add("brick");
+        brick.dataset.health = 3; // add remaining health
+        // change the style of the brick to become red
+        brick.style.backgroundColor = "purple";
+        brick.style.top = row * (brickHeight + brickSpacing) + "px";
+        brick.style.left = col * (brickWidth + brickSpacing) + "px";
+        grid[0].appendChild(brick);
+      }
+      if (levelData[row][col] === 4) {
+        // count++;
+        const brick = document.createElement("div");
+        brick.classList.add("brick");
+        brick.dataset.health = 4; // add remaining health
+        // change the style of the brick to become red
+        brick.style.backgroundColor = "green";
+        brick.style.top = row * (brickHeight + brickSpacing) + "px";
+        brick.style.left = col * (brickWidth + brickSpacing) + "px";
+        grid[0].appendChild(brick);
+      }
     }
   }
 }
@@ -100,13 +133,13 @@ function createBricks(levelData) {
 // Level 1
 
 const level1 = [
-  [0, 0, 0, 1, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 1, 0, 0, 0],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1],
 ];
-const levelData = [
+const level = [
   [1, 0, 1, 0, 1, 0, 1, 0, 1],
   [0, 1, 0, 1, 1, 1, 0, 1, 0],
   [1, 0, 1, 0, 1, 0, 1, 0, 1],
@@ -114,7 +147,7 @@ const levelData = [
   [1, 0, 1, 0, 1, 0, 1, 0, 1],
 ];
 
-createBricks(levelData);
+createBricks(level1);
 
 // -----------------------------------------------Paddle Movement------------------------------------------------
 
@@ -317,9 +350,14 @@ function detectBrickCollisions(ballX, ballY) {
       }
 
       sound("tap.wav");
-      generatePowerup(brickRect.left, brickRect.top);
-      brick[i].remove();
-      scoreCounter();
+      if (brick[i].dataset.health > 1 && brick[i].dataset.health <= 3) {
+        brick[i].dataset.health--; // decrease remaining health
+      } else if (brick[i].dataset.health >= 4) {
+      } else {
+        brick[i].remove(); // destroy brick if health is 0
+        scoreCounter();
+        generatePowerup(brickRect.left, brickRect.top);
+      }
     }
   }
 }
@@ -379,7 +417,6 @@ let powerupExists = false;
 
 // Powerups;
 function generatePowerup(x, y) {
-  // brickRect = Brick.getBoundingClientRect();
 
   if (random() && !powerupExists) {
     gameScreenRect = gameScreen.getBoundingClientRect();
@@ -400,29 +437,6 @@ function generatePowerup(x, y) {
     movePowerup(powerup);
   }
 }
-
-// function generatePowerup(x, y) {
-//   // brickRect = Brick.getBoundingClientRect();
-
-//   if (!powerupExists) {
-//     gameScreenRect = gameScreen.getBoundingClientRect();
-
-//     console.log(x, y);
-
-//     let powerup = document.createElement("div");
-//     powerup.classList.add("powerup" + randomNum());
-//     powerup.style.left =
-//       x - gameScreenRect.left - powerup.offsetWidth / 2 + ballRadius + "px";
-//     powerup.style.top =
-//       y - gameScreenRect.top - powerup.offsetHeight / 2 + "px";
-
-//     gameScreen.appendChild(powerup);
-
-//     powerupExists = true;
-
-//     movePowerup(powerup);
-//   }
-// }
 
 function movePowerup(powerup) {
   let powerupY = powerup.offsetTop;

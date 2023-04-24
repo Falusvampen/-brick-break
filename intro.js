@@ -49,8 +49,10 @@ scroll.addEventListener("animationend", () => {
 const game = document.getElementById("game-container");
 const intro = document.getElementById("containercover");
 //game.addEventListener('')
+
+let alldone = false;
 document.addEventListener("keydown", function (event) {
-  if (event.code === "Enter") {
+  if (event.code === "Enter" && alldone === false) {
     // Stop the audio file
     audio.pause();
     audio.currentTime = 0;
@@ -64,6 +66,8 @@ document.addEventListener("keydown", function (event) {
     start.style.display = "none";
     all.style.visibility = "hidden";
     game.style.visibility = "visible";
-    intro.style.visibility = "hidden";
+
+    alldone = true;
+    // intro.style.visibility = "hidden";
   }
 });

@@ -44,8 +44,45 @@ body {
   z-index: 999;
   /* visibility: hidden; */
 }
+
+.level-modal{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 999;
+  /* visibility: hidden; */
+}
+
 .fade-in-out {
   animation: fadeInOut 2s ease-in-out infinite;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s;
+}
+
+.fade-out {
+  animation: fadeOut 0.5s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes fadeInOut {
@@ -198,7 +235,6 @@ p {
   border: 1px solid #fff;
   /* add more styles here */
 }
-
 
 .powerup1 {
   position: absolute;

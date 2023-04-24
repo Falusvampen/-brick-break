@@ -2,6 +2,10 @@ document.addEventListener("keydown", function (event) {
   if (event.code === "Enter" && introdone === false) {
     introdone = true;
     paused = false;
+    createBricks(level1);
+    showLevel(1);
+    levelcount++;
+    holdball();
   }
 });
 
@@ -32,13 +36,69 @@ function resume() {
   modal.style.display = "none";
   paused = false;
   moveBall();
-  movePowerup(document.querySelector(".powerup"));
+  if (powerupExists) {
+    movePowerup(document.querySelector(".powerup"));
+  }
   startTimer();
 }
 
+function nextLevel() {
+  if (document.querySelector(".powerup")) {
+    document.querySelector(".powerup").remove();
+  }
+  powerupExists = false;
+  // Reset the ball position, direction, and speed
+  ballDirectionX = 0;
+  ballDirectionY = 1;
+  ballSpeed = 5;
+  holdball();
+  ballReleased = false;
+  moveBall();
+
+  timer.innerHTML = "Timer: 180";
+
+  brickdestroyed = 0;
+  count = 0;
+
+  let level = "level" + levelcount.toString();
+  createBricks(level);
+  showLevel(levelcount);
+}
+
 function restart() {
+  // if there is a powerup, remove it and the powerup exists is false
+  if (document.querySelector(".powerup")) {
+    document.querySelector(".powerup").remove();
+  }
+  powerupExists = false;
+
+  // Reset the ball position, direction, and speed
+  ballDirectionX = 0;
+  ballDirectionY = 1;
+  ballSpeed = 5;
+  holdball();
+  ballReleased = false;
+  moveBall();
+
+  // Reset the score, lives, and timer
+  score.innerHTML = "Score: 0";
+  lives.innerHTML = "Lives: 3";
+  timer.innerHTML = "Timer: 180";
+
+  // Remove all bricks and create a new set
+  removeAllBricks();
+  brickdestroyed = 0;
+  count = 0;
+  createBricks(level1);
+
+  // Hide the modal
   modal.style.display = "none";
-  // Code to restart the game
+  // Unpause the game
+  paused = false;
+  // Show the level
+  levelcount = 1;
+  showLevel(levelcount);
+  levelcount++;
 }
 
 function quit() {
@@ -128,18 +188,38 @@ function createBricks(levelData) {
     }
   }
 }
+
+function removeAllBricks() {
+  const bricks = document.querySelectorAll(".brick");
+  bricks.forEach((brick) => brick.remove());
+}
+
 // -----------------------------------------------Levels------------------------------------------------
 
 // Level 1
-
+// const level1 = [
+//   [1, 0, 1, 0, 1, 0, 1, 0, 1],
+//   [0, 0, 0, 0, 1, 0, 0, 0, 0],
+//   [0, 1, 0, 0, 1, 0, 0, 1, 0],
+//   [0, 0, 0, 1, 1, 1, 0, 0, 0],
+//   [1, 0, 0, 0, 1, 0, 0, 0, 1],
+// ];
 const level1 = [
+  [0, 0, 0, 0, 1, 0, 0, 0, 0],
+  [0, 0, 0, 0, 1, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+];
+
+const level2 = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1],
   [1, 1, 1, 1, 1, 1, 1, 1, 1],
   [1, 1, 1, 1, 1, 1, 1, 1, 1],
   [1, 1, 1, 1, 1, 1, 1, 1, 1],
   [1, 1, 1, 1, 1, 1, 1, 1, 1],
 ];
-const level = [
+const level3 = [
   [1, 0, 1, 0, 1, 0, 1, 0, 1],
   [0, 1, 0, 1, 1, 1, 0, 1, 0],
   [1, 0, 1, 0, 1, 0, 1, 0, 1],
@@ -147,7 +227,7 @@ const level = [
   [1, 0, 1, 0, 1, 0, 1, 0, 1],
 ];
 
-createBricks(level1);
+// createBricks(level1);
 
 // -----------------------------------------------Paddle Movement------------------------------------------------
 
@@ -240,7 +320,7 @@ function holdball() {
   ball.style.top = paddle.offsetTop - 35 + "px";
 }
 // Running the function here makes the ball always start in the middle of the paddle
-holdball();
+// holdball();
 
 // Start the game with spacebar
 document.addEventListener("keydown", function (event) {
@@ -308,7 +388,7 @@ function isBallCollidingWithPaddle(ballX, ballY) {
   if (ballY + 30 > paddle.offsetTop && ballY + 30 < paddle.offsetTop + 10) {
     if (
       ballX + 20 > paddle.offsetLeft &&
-      ballX < paddle.offsetLeft + paddleWidth &&
+      ballX - 20 < paddle.offsetLeft + paddleWidth &&
       ballY + 30 > paddle.offsetTop
     ) {
       ballDirectionY = -1;
@@ -417,7 +497,6 @@ let powerupExists = false;
 
 // Powerups;
 function generatePowerup(x, y) {
-
   if (random() && !powerupExists) {
     gameScreenRect = gameScreen.getBoundingClientRect();
 
@@ -466,7 +545,7 @@ function movePowerup(powerup) {
       doPowerup(powerup);
       powerup.remove();
       powerupExists = false;
-      sound("hit");
+      sound("hit.wav");
     }
   }
 }
@@ -531,8 +610,8 @@ function scoreCounter() {
   brickdestroyed++;
   score.innerHTML = "Score: " + currentScore;
   if (brickdestroyed === count) {
-    alert("Nice Job, Press ENTER for next level");
-    document.location.reload();
+    sound("mlg.mp3");
+    nextLevel();
   }
 }
 
@@ -561,7 +640,29 @@ function sound(src) {
 }
 
 // make sure that the sound effects and music are loaded before the game starts
-window.addEventListener("load", function () {
-  sound("tap");
-  sound("hit");
-});
+// window.addEventListener("load", function () {
+//   sound("tap");
+//   sound("hit");
+// });
+
+let levelcount = 1;
+
+function showLevel(level) {
+  const levelModal = document.getElementById("level-modal");
+  const levelText = document.getElementById("level-text");
+
+  levelText.textContent = `Level ${level}`;
+
+  levelModal.classList.add("fade-in");
+  levelModal.style.display = "block";
+
+  setTimeout(() => {
+    levelModal.classList.remove("fade-in");
+    levelModal.classList.add("fade-out");
+  }, 4000);
+
+  setTimeout(() => {
+    levelModal.style.display = "none";
+    levelModal.classList.remove("fade-out");
+  }, 4500);
+}

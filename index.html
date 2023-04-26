@@ -261,15 +261,56 @@
         </button>
       </div>
     </div>
+    <div id="game-over-modal" class="modal" style="display: none">
+      <div class="modal-content">
+        <h1>Git gud kiddo</h1>
+        <br />
+        <h3>You failed to save the world</h3>
+        <p>Learn how to play or uninstall</p>
+        <div class="modal-buttons">
+          <button class="btn-101" id="restart-game-btn" onclick="restart()">
+            Restart
+            <svg>
+              <defs>
+                <filter id="glow">
+                  <fegaussianblur
+                    result="coloredBlur"
+                    stddeviation="5"
+                  ></fegaussianblur>
+                  <femerge>
+                    <femergenode in="coloredBlur"></femergenode>
+                    <femergenode in="coloredBlur"></femergenode>
+                    <femergenode in="coloredBlur"></femergenode>
+                    <femergenode in="SourceGraphic"></femergenode>
+                  </femerge>
+                </filter>
+              </defs>
+              <rect />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
     <div id="game-container">
       <div>
         <div id="game-screen">
+          <div id="elprimo" class="elprimo-modal" style="display: none">
+            <div class="elprimo-modal-content">
+              <video
+                id="myVideo"
+                width="320"
+                height="240"
+                src="./videos/elprimo.mp4"
+                type="video/mp4"
+              ></video>
+            </div>
+          </div>
           <div class="grid"></div>
           <div id="ball"></div>
           <div id="paddle"></div>
           <div id="level-modal" style="display: none" class="level-modal">
             <!-- <div class="modal-content"> -->
-              <h1 id="level-text"></h1>
+            <h1 id="level-text"></h1>
             <!-- </div> -->
           </div>
         </div>

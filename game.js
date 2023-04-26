@@ -1,10 +1,12 @@
+let levelcount = 1;
+
 document.addEventListener("keydown", function (event) {
   if (event.code === "Enter" && introdone === false) {
     introdone = true;
     paused = false;
     createBricks(level1);
     showLevel(1);
-    levelcount++;
+    // levelcount++;
     holdball();
   }
 });
@@ -43,29 +45,46 @@ function resume() {
 }
 
 function nextLevel() {
-  // add 100 seconds to the timer element
-  addTimer(100);
-  clearInterval(timerInterval);
-  if (document.querySelector(".powerup")) {
-    document.querySelector(".powerup").remove();
+  if (levelcount === levels.length) {
+    alert("You saved the world");
+    rickroll();
+  } else {
+    // add 100 seconds to the timer element
+    addTimer(100);
+    clearInterval(timerInterval);
+    if (document.querySelector(".powerup")) {
+      document.querySelector(".powerup").remove();
+    }
+
+    powerupExists = false;
+    // Reset the ball position, direction, and speed
+    ballDirectionX = 0;
+    ballDirectionY = 1;
+    ballSpeed = 5;
+    holdball();
+    ballReleased = false;
+    moveBall();
+
+    brickdestroyed = 0;
+    count = 0;
+
+    elprimo.style.display = "block";
+    video.play();
+
+    pause.addEventListener("click", rickroll);
+
+    video.addEventListener("ended", function () {
+      elprimo.style.display = "none";
+      createBricks(levels[levelcount]);
+      showLevel(levelcount + 1);
+      levelcount++;
+      pause.removeEventListener("click", rickroll);
+    });
   }
-
-  powerupExists = false;
-  // Reset the ball position, direction, and speed
-  ballDirectionX = 0;
-  ballDirectionY = 1;
-  ballSpeed = 5;
-  holdball();
-  ballReleased = false;
-  moveBall();
-
-  brickdestroyed = 0;
-  count = 0;
-
-  createBricks(levels[levelcount]);
-  showLevel(levelcount);
-  levelcount++;
 }
+
+var elprimo = document.getElementById("elprimo");
+var video = document.getElementById("myVideo");
 
 function restart() {
   // if there is a powerup, remove it and the powerup exists is false
@@ -218,7 +237,7 @@ const level3 = [
   [0, 0, 0, 0, 1, 0, 0, 0, 0],
   [0, 0, 0, 0, 1, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 3, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
@@ -664,8 +683,6 @@ function sound(src) {
 //   sound("hit");
 // });
 
-let levelcount = 1;
-
 function showLevel(level) {
   const levelModal = document.getElementById("level-modal");
   const levelText = document.getElementById("level-text");
@@ -684,4 +701,8 @@ function showLevel(level) {
     levelModal.style.display = "none";
     levelModal.classList.remove("fade-out");
   }, 4500);
+}
+
+function rickroll() {
+  window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
 }

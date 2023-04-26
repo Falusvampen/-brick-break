@@ -2,6 +2,9 @@
 #2 implement Pause button (DONE)
 
 Bugfixes:
-#1 brick side collision? (might be fixed)
+#1 brick side collision? (fixed)
 #2 powerups spawn twice, issue is in movePowerup function (FIXED)
-#3 Timer not consistent 
+#3 Timer not consistent (fixed)
+#4 one brick is gone when using the createbricks again
+#5 sometimes the ball bounces incorrectly, probably because of hitbox on bottom side being too big
+

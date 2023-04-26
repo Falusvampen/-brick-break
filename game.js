@@ -43,9 +43,13 @@ function resume() {
 }
 
 function nextLevel() {
+  // add 100 seconds to the timer element
+  addTimer(100);
+  clearInterval(timerInterval);
   if (document.querySelector(".powerup")) {
     document.querySelector(".powerup").remove();
   }
+
   powerupExists = false;
   // Reset the ball position, direction, and speed
   ballDirectionX = 0;
@@ -55,14 +59,12 @@ function nextLevel() {
   ballReleased = false;
   moveBall();
 
-  timer.innerHTML = "Timer: 180";
-
   brickdestroyed = 0;
   count = 0;
 
-  let level = "level" + levelcount.toString();
-  createBricks(level);
+  createBricks(levels[levelcount]);
   showLevel(levelcount);
+  levelcount++;
 }
 
 function restart() {
@@ -196,14 +198,8 @@ function removeAllBricks() {
 
 // -----------------------------------------------Levels------------------------------------------------
 
-// Level 1
-// const level1 = [
-//   [1, 0, 1, 0, 1, 0, 1, 0, 1],
-//   [0, 0, 0, 0, 1, 0, 0, 0, 0],
-//   [0, 1, 0, 0, 1, 0, 0, 1, 0],
-//   [0, 0, 0, 1, 1, 1, 0, 0, 0],
-//   [1, 0, 0, 0, 1, 0, 0, 0, 1],
-// ];
+// array with all levels
+
 const level1 = [
   [0, 0, 0, 0, 1, 0, 0, 0, 0],
   [0, 0, 0, 0, 1, 0, 0, 0, 0],
@@ -211,22 +207,37 @@ const level1 = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
-
 const level2 = [
-  [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [0, 0, 0, 0, 1, 0, 0, 0, 0],
+  [0, 0, 0, 0, 1, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 const level3 = [
-  [1, 0, 1, 0, 1, 0, 1, 0, 1],
-  [0, 1, 0, 1, 1, 1, 0, 1, 0],
-  [1, 0, 1, 0, 1, 0, 1, 0, 1],
-  [0, 1, 0, 1, 1, 1, 0, 1, 0],
-  [1, 0, 1, 0, 1, 0, 1, 0, 1],
+  [0, 0, 0, 0, 1, 0, 0, 0, 0],
+  [0, 0, 0, 0, 1, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
+// const level2 = [
+//   [1, 1, 1, 1, 1, 1, 1, 1, 1],
+//   [1, 1, 1, 1, 1, 1, 1, 1, 1],
+//   [1, 1, 1, 1, 1, 1, 1, 1, 1],
+//   [1, 1, 1, 1, 1, 1, 1, 1, 1],
+//   [1, 1, 1, 1, 1, 1, 1, 1, 1],
+// ];
+// const level3 = [
+//   [1, 0, 1, 0, 1, 0, 1, 0, 1],
+//   [0, 1, 0, 1, 1, 1, 0, 1, 0],
+//   [1, 0, 1, 0, 1, 0, 1, 0, 1],
+//   [0, 1, 0, 1, 1, 1, 0, 1, 0],
+//   [1, 0, 1, 0, 1, 0, 1, 0, 1],
+// ];
+
+const levels = [level1, level2, level3];
 // createBricks(level1);
 
 // -----------------------------------------------Paddle Movement------------------------------------------------
@@ -551,21 +562,17 @@ function movePowerup(powerup) {
 }
 
 function doPowerup(powerup) {
-  // let nb = Math.random();
   if (powerup.classList.contains("powerup1")) {
     //powerup #1 Add 1 more Life
-    console.log("low");
     addOneLife();
   }
   if (powerup.classList.contains("powerup2")) {
     //powerup #2 Add 10 score
-    console.log("mid");
     addScore();
   }
   if (powerup.classList.contains("powerup3")) {
-    //powerup #3 Add 10 seconds to timer
-    console.log("high");
-    addTimer();
+    //powerup #3 Add 25 seconds to timer
+    addTimer(25);
   }
 }
 
@@ -577,9 +584,9 @@ function addScore() {
 }
 
 //adds 10 seconds to timer
-function addTimer() {
+function addTimer(time) {
   let currentTimer = parseInt(timer.innerHTML.split(" ")[1]);
-  currentTimer = currentTimer + 10;
+  currentTimer = currentTimer + time;
   timer.innerHTML = "Timer: " + currentTimer;
 }
 
@@ -616,21 +623,33 @@ function scoreCounter() {
 }
 
 let timerInterval;
+let initialTime;
+let startTime;
 
-//Timer function removes one second from timer
+// Timer function removes one second from timer
 function timerCounter() {
-  let currentTimer = parseInt(timer.innerHTML.split(" ")[1]);
-  currentTimer = currentTimer - 1;
-  timer.innerHTML = "Time: " + currentTimer;
-  if (currentTimer === -1) {
+  const currentTime = Date.now();
+  const elapsedTime = currentTime - startTime;
+  const remainingTime = Math.max(
+    0,
+    Math.floor((initialTime * 1000 - elapsedTime) / 1000)
+  );
+
+  timer.innerHTML = "Time: " + remainingTime;
+
+  if (remainingTime <= 0) {
+    clearInterval(timerInterval);
     alert("Game over, ran out of time");
     document.location.reload();
   }
 }
 
-//Starts timer and runs timerCounter function every second
+// Starts timer and runs timerCounter function every second
 function startTimer() {
-  timerInterval = setInterval(timerCounter, 1000);
+  initialTime = parseInt(timer.innerHTML.split(" ")[1]);
+  startTime = Date.now();
+
+  timerInterval = setInterval(timerCounter, 100);
 }
 
 // Sound effects and music

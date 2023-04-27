@@ -4,6 +4,7 @@ document.addEventListener("keydown", function (event) {
   if (event.code === "Enter" && introdone === false) {
     introdone = true;
     paused = false;
+    centerPaddle();
     createBricks(level1);
     showLevel(1);
     // levelcount++;
@@ -87,6 +88,7 @@ var elprimo = document.getElementById("elprimo");
 var video = document.getElementById("myVideo");
 
 function restart() {
+  centerPaddle();
   // if there is a powerup, remove it and the powerup exists is false
   if (document.querySelector(".powerup")) {
     document.querySelector(".powerup").remove();
@@ -219,13 +221,13 @@ function removeAllBricks() {
 
 // array with all levels
 
-const level1 = [
-  [0, 0, 0, 0, 1, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-];
+// const level1 = [
+//   [0, 0, 0, 0, 1, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 1, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+// ];
 const level2 = [
   [0, 0, 0, 0, 1, 0, 0, 0, 0],
   [0, 0, 0, 0, 1, 0, 0, 0, 0],
@@ -241,13 +243,13 @@ const level3 = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
-// const level2 = [
-//   [1, 1, 1, 1, 1, 1, 1, 1, 1],
-//   [1, 1, 1, 1, 1, 1, 1, 1, 1],
-//   [1, 1, 1, 1, 1, 1, 1, 1, 1],
-//   [1, 1, 1, 1, 1, 1, 1, 1, 1],
-//   [1, 1, 1, 1, 1, 1, 1, 1, 1],
-// ];
+const level1 = [
+  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+];
 // const level3 = [
 //   [1, 0, 1, 0, 1, 0, 1, 0, 1],
 //   [0, 1, 0, 1, 1, 1, 0, 1, 0],
@@ -271,6 +273,10 @@ const maxPaddleX = gameScreenWidth - paddleWidth - 10;
 
 let animationId;
 let currentDirection = null;
+
+function centerPaddle() {
+  paddle.style.left = gameScreenWidth / 2 - paddleWidth / 2 - 2 + "px";
+}
 
 document.addEventListener("keydown", function (event) {
   if (paused) {
@@ -348,6 +354,7 @@ let ballReleased = false;
 function holdball() {
   ball.style.left = paddle.offsetLeft + paddleWidth / 2 - 10 + "px";
   ball.style.top = paddle.offsetTop - 35 + "px";
+  ballDirectionX = 0;
 }
 // Running the function here makes the ball always start in the middle of the paddle
 // holdball();
@@ -406,9 +413,7 @@ function detectBallCollisions() {
     sound("wallhit.mp3");
   }
   // Ball hits the paddle
-  if (isBallCollidingWithPaddle(ballX, ballY)) {
-    sound("blaster.mp3");
-  }
+  isBallCollidingWithPaddle(ballX, ballY);
 
   // Ball hits a brick
   detectBrickCollisions(ballX, ballY);
@@ -429,9 +434,16 @@ function isBallCollidingWithPaddle(ballX, ballY) {
       // Scale the distance to a reasonable value for ballDirectionX
       let scaleFactor = 10;
       ballDirectionX = distanceFromCenter / scaleFactor;
+      blinkRed();
+      sound("blaster.mp3");
     }
-    sound("blaster.mp3");
   }
+}
+function blinkRed() {
+  paddle.style.backgroundColor = "red";
+  setTimeout(function () {
+    paddle.style.backgroundColor = "#333";
+  }, 100);
 }
 
 // Brick collision detection

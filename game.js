@@ -1,5 +1,3 @@
-let levelcount = 1;
-
 document.addEventListener("keydown", function (event) {
   if (event.code === "Enter" && introdone === false) {
     introdone = true;
@@ -24,6 +22,7 @@ const grid = document.getElementsByClassName("grid");
 const pause = document.getElementById("pause-btn");
 const powerup = document.getElementById("powerup");
 
+let levelcount = 1;
 let paused = true;
 let introdone = false;
 
@@ -40,7 +39,7 @@ function resume() {
   paused = false;
   moveBall();
   if (powerupExists) {
-    movePowerup(document.querySelector(".powerup"));
+    movePowerup(document.getElementById("powerup"));
   }
   startTimer();
 }
@@ -53,8 +52,8 @@ function nextLevel() {
     // add 100 seconds to the timer element
     addTimer(100);
     clearInterval(timerInterval);
-    if (document.querySelector(".powerup")) {
-      document.querySelector(".powerup").remove();
+    if (powerupExists) {
+      document.getElementById("powerup").remove();
     }
 
     powerupExists = false;
@@ -90,8 +89,8 @@ var video = document.getElementById("myVideo");
 function restart() {
   centerPaddle();
   // if there is a powerup, remove it and the powerup exists is false
-  if (document.querySelector(".powerup")) {
-    document.querySelector(".powerup").remove();
+  if (powerupExists) {
+    document.getElementById("powerup").remove();
   }
   powerupExists = false;
 
@@ -546,6 +545,10 @@ function generatePowerup(x, y) {
 
     let powerup = document.createElement("div");
     powerup.classList.add("powerup" + randomNum());
+
+    // add the id to it
+    powerup.id = "powerup";
+
     powerup.style.left =
       x - gameScreenRect.left - powerup.offsetWidth / 2 + ballRadius + "px";
     powerup.style.top =

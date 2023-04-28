@@ -22,12 +22,26 @@ const grid = document.getElementsByClassName("grid");
 const pause = document.getElementById("pause-btn");
 const powerup = document.getElementById("powerup");
 
+var elprimo = document.getElementById("elprimo");
+var video = document.getElementById("myVideo");
+const modal = document.getElementById("pauseModal");
+const howmodal = document.getElementById("howto");
+
+// Game variables
+
 let levelcount = 1;
 let paused = true;
 let introdone = false;
+let animationId;
+let ballReleased = false;
 
-const modal = document.getElementById("pauseModal");
-const howmodal = document.getElementById("howto");
+let ballDirectionX = 0;
+let ballDirectionY = 1;
+let ballSpeed = 5;
+let ballRadius = 10;
+
+let powerupExists = false;
+let timerInterval;
 
 function showModal() {
   modal.style.display = "flex";
@@ -82,9 +96,6 @@ function nextLevel() {
     });
   }
 }
-
-var elprimo = document.getElementById("elprimo");
-var video = document.getElementById("myVideo");
 
 function restart() {
   centerPaddle();
@@ -270,7 +281,6 @@ const gameScreenHeight = gameScreen.offsetHeight;
 const minPaddleX = 5;
 const maxPaddleX = gameScreenWidth - paddleWidth - 10;
 
-let animationId;
 let currentDirection = null;
 
 function centerPaddle() {
@@ -347,16 +357,12 @@ function movePaddleRight() {
 
 // -----------------------------------------------Ball Movement------------------------------------------------
 
-let ballReleased = false;
-
 // Initial position of the ball
 function holdball() {
   ball.style.left = paddle.offsetLeft + paddleWidth / 2 - 10 + "px";
   ball.style.top = paddle.offsetTop - 35 + "px";
   ballDirectionX = 0;
 }
-// Running the function here makes the ball always start in the middle of the paddle
-// holdball();
 
 // Start the game with spacebar
 document.addEventListener("keydown", function (event) {
@@ -370,10 +376,6 @@ document.addEventListener("keydown", function (event) {
     }
   }
 });
-let ballDirectionX = 0;
-let ballDirectionY = 1;
-let ballSpeed = 5;
-let ballRadius = 10;
 
 function getDistance(ballX, ballY, x, y) {
   let xDistance = x2 - x1;
@@ -534,8 +536,6 @@ function randomNum() {
   return Math.floor(Math.random() * 3 + 1).toString();
 }
 
-let powerupExists = false;
-
 // Powerups;
 function generatePowerup(x, y) {
   if (random() && !powerupExists) {
@@ -656,7 +656,6 @@ function scoreCounter() {
   }
 }
 
-let timerInterval;
 let initialTime;
 let startTime;
 

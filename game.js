@@ -44,10 +44,11 @@ let powerupExists = false;
 let timerInterval;
 
 function showModal() {
+  timerInterval = clearInterval(timerInterval);
   modal.style.display = "flex";
   paused = true;
-  clearInterval(timerInterval);
 }
+
 function resume() {
   modal.style.display = "none";
   paused = false;
@@ -59,18 +60,29 @@ function resume() {
 }
 
 function nextLevel() {
+  removeAllBricks();
   if (levelcount === levels.length) {
-    alert("You saved the world");
-    rickroll();
+    paused = true;
+    // clearInterval(timerInterval);
+    document.getElementById("git-gud").innerHTML = "You saved the world!!!";
+    document.getElementById("rude-h3").innerHTML = "Sigma move";
+    document.getElementById("rude-text").innerHTML =
+      "Your MURDERcount is " +
+      score.innerHTML +
+      "!!!" +
+      "<br>" +
+      "You are a true sigma!!!";
+    document.getElementById("nice").innerHTML = "Go celebrate, nerd!";
+    document.getElementById("game-over-modal").style.display = "flex";
   } else {
     // add 100 seconds to the timer element
     addTimer(100);
     clearInterval(timerInterval);
     if (powerupExists) {
       document.getElementById("powerup").remove();
+      powerupExists = false;
     }
 
-    powerupExists = false;
     // Reset the ball position, direction, and speed
     ballDirectionX = 0;
     ballDirectionY = 1;
@@ -84,10 +96,15 @@ function nextLevel() {
 
     elprimo.style.display = "block";
     video.play();
+    // paused = true;
+    ballReleased = false;
+    holdball();
+    clearInterval(timerInterval);
 
     pause.addEventListener("click", rickroll);
 
     video.addEventListener("ended", function () {
+      paused = false;
       elprimo.style.display = "none";
       createBricks(levels[levelcount]);
       showLevel(levelcount + 1);
@@ -231,35 +248,122 @@ function removeAllBricks() {
 
 // array with all levels
 
-// const level1 = [
+const level1 = [
+  [0, 0, 0, 0, 1, 0, 0, 0, 0],
+  [0, 0, 0, 1, 0, 1, 0, 0, 0],
+  [0, 0, 1, 0, 0, 0, 1, 0, 0],
+  [0, 1, 0, 0, 0, 0, 0, 1, 0],
+  [1, 0, 0, 0, 0, 0, 0, 0, 1],
+];
+
+const level2 = [
+  [0, 0, 0, 0, 1, 0, 0, 0, 0],
+  [0, 0, 0, 1, 0, 1, 0, 0, 0],
+  [0, 0, 1, 0, 0, 0, 1, 0, 0],
+  [0, 1, 0, 1, 0, 1, 0, 1, 0],
+  [1, 0, 0, 0, 1, 0, 0, 0, 1],
+];
+
+const level3 = [
+  [1, 0, 1, 0, 1, 0, 1, 0, 1],
+  [1, 0, 1, 0, 1, 0, 1, 0, 1],
+  [1, 0, 1, 0, 1, 0, 1, 0, 1],
+  [1, 0, 1, 0, 1, 0, 1, 0, 1],
+  [1, 0, 1, 0, 1, 0, 1, 0, 1],
+];
+
+const level4 = [
+  [0, 0, 1, 1, 1, 1, 1, 0, 0],
+  [0, 1, 0, 0, 1, 0, 0, 1, 0],
+  [1, 0, 1, 1, 1, 1, 1, 0, 1],
+  [1, 0, 0, 0, 1, 0, 0, 0, 1],
+  [1, 0, 1, 1, 1, 1, 1, 0, 1],
+];
+
+const level5 = [
+  [2, 2, 2, 2, 2, 2, 2, 2, 2],
+  [2, 0, 0, 0, 0, 0, 0, 0, 2],
+  [2, 0, 3, 3, 3, 3, 3, 0, 2],
+  [2, 0, 3, 0, 0, 0, 3, 0, 2],
+  [2, 2, 2, 2, 2, 2, 2, 2, 2],
+];
+
+const level6 = [
+  [1, 2, 1, 0, 0, 0, 1, 2, 1],
+  [2, 0, 2, 1, 1, 1, 2, 0, 2],
+  [1, 2, 1, 0, 0, 0, 1, 2, 1],
+  [0, 0, 0, 1, 2, 1, 0, 0, 0],
+  [1, 1, 1, 2, 1, 2, 1, 1, 1],
+];
+
+const level7 = [
+  [0, 1, 0, 2, 0, 2, 0, 1, 0],
+  [1, 0, 1, 0, 1, 0, 1, 0, 1],
+  [0, 1, 0, 2, 0, 2, 0, 1, 0],
+  [1, 0, 1, 0, 1, 0, 1, 0, 1],
+  [0, 1, 0, 2, 0, 2, 0, 1, 0],
+];
+
+const level8 = [
+  [4, 0, 4, 0, 4, 0, 4, 0, 4],
+  [0, 3, 0, 3, 0, 3, 0, 3, 0],
+  [4, 0, 4, 0, 4, 0, 4, 0, 4],
+  [0, 3, 0, 3, 0, 3, 0, 3, 0],
+  [4, 0, 4, 0, 4, 0, 4, 0, 4],
+];
+
+const level9 = [
+  [0, 1, 2, 3, 4, 3, 2, 1, 0],
+  [1, 0, 1, 2, 3, 2, 1, 0, 1],
+  [2, 1, 0, 1, 2, 1, 0, 1, 2],
+  [3, 2, 1, 0, 1, 0, 1, 2, 3],
+  [4, 3, 2, 1, 0, 1, 2, 3, 4],
+];
+
+const level10 = [
+  [1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 0, 1, 1, 1, 1],
+  [1, 1, 1, 4, 0, 4, 1, 1, 1],
+  [1, 1, 1, 4, 0, 4, 1, 1, 1],
+  [4, 4, 4, 4, 0, 4, 4, 4, 4],
+];
+
+// const level8 = [
+//   [0, 0, 0, 0, 4, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 1, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+// ];
+// const level89 = [
 //   [0, 0, 0, 0, 1, 0, 0, 0, 0],
 //   [0, 0, 0, 0, 1, 0, 0, 0, 0],
 //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 // ];
-const level2 = [
-  [0, 0, 0, 0, 1, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-];
-const level3 = [
-  [0, 0, 0, 0, 1, 0, 0, 0, 0],
-  [0, 0, 0, 0, 1, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 3, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-];
+// const level2 = [
+//   [0, 0, 0, 0, 1, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 1, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+// ];
+// const level3 = [
+//   [0, 0, 0, 0, 1, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 1, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 3, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+// ];
 
-const level1 = [
-  [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1],
-];
+// const level1 = [
+//   [1, 1, 1, 1, 1, 1, 1, 1, 1],
+//   [1, 1, 1, 1, 1, 1, 1, 1, 1],
+//   [1, 1, 1, 1, 1, 1, 1, 1, 1],
+//   [1, 1, 1, 1, 1, 1, 1, 1, 1],
+//   [1, 1, 1, 1, 1, 1, 1, 1, 1],
+// ];
 // const level3 = [
 //   [1, 0, 1, 0, 1, 0, 1, 0, 1],
 //   [0, 1, 0, 1, 1, 1, 0, 1, 0],
@@ -268,7 +372,18 @@ const level1 = [
 //   [1, 0, 1, 0, 1, 0, 1, 0, 1],
 // ];
 
-const levels = [level1, level2, level3];
+const levels = [
+  level1,
+  level2,
+  level3,
+  level4,
+  level5,
+  level6,
+  level7,
+  level8,
+  level9,
+  level10,
+];
 // createBricks(level1);
 
 // -----------------------------------------------Paddle Movement------------------------------------------------
@@ -447,14 +562,22 @@ function blinkRed() {
   }, 100);
 }
 
-// Brick collision detection
-function detectBrickCollisions(ballX, ballY) {
+function detectBrickCollisions() {
   const ballRect = ball.getBoundingClientRect();
+  const circle = {
+    x: ballRect.x + ballRect.width / 2,
+    y: ballRect.y + ballRect.height / 2,
+    radius: Math.min(ballRect.width, ballRect.height) / 2,
+  };
+
+  let collidedHorizontally = false;
+  let collidedVertically = false;
+  let collisionProcessed = false;
 
   for (let i = 0; i < brick.length; i++) {
     let brickRect = brick[i].getBoundingClientRect();
 
-    if (isRectanglesColliding(ballRect, brickRect)) {
+    if (isRectanglesColliding(circle, brickRect)) {
       // Calculate the hit direction
       const hitLeft = ballRect.right - brickRect.left;
       const hitRight = brickRect.right - ballRect.left;
@@ -464,34 +587,95 @@ function detectBrickCollisions(ballX, ballY) {
       const minHorizontal = Math.min(hitLeft, hitRight);
       const minVertical = Math.min(hitTop, hitBottom);
 
-      // If horizontal collision is smaller, change X direction
-      if (minHorizontal < minVertical) {
-        ballDirectionX = -ballDirectionX;
-      } else {
-        // If vertical collision is smaller, change Y direction
-        ballDirectionY = -ballDirectionY;
+      if (minHorizontal < minVertical && !collisionProcessed) {
+        collidedHorizontally = true;
+        collisionProcessed = true;
+      } else if (!collisionProcessed) {
+        collidedVertically = true;
+        collisionProcessed = true;
       }
 
       sound("tap.wav");
       if (brick[i].dataset.health > 1 && brick[i].dataset.health <= 3) {
-        brick[i].dataset.health--; // decrease remaining health
+        brick[i].dataset.health--;
       } else if (brick[i].dataset.health >= 4) {
       } else {
-        brick[i].remove(); // destroy brick if health is 0
+        brick[i].remove();
         scoreCounter();
         generatePowerup(brickRect.left, brickRect.top);
       }
     }
   }
+
+  if (collidedHorizontally) {
+    ballDirectionX = -ballDirectionX;
+  }
+  if (collidedVertically) {
+    ballDirectionY = -ballDirectionY;
+  }
+
+  // Update the ball's position
+  ball.style.left = circle.x - circle.radius + "px";
+  ball.style.top = circle.y - circle.radius + "px";
+
+  // Ensure that the ball is not inside any brick after updating its position
+  for (let i = 0; i < brick.length; i++) {
+    let brickRect = brick[i].getBoundingClientRect();
+
+    while (isRectanglesColliding(circle, brickRect)) {
+      // Move the ball slightly away from the brick until it is no longer colliding
+      const offsetX = Math.sign(ballDirectionX) * 0.5;
+      const offsetY = Math.sign(ballDirectionY) * 0.5;
+      circle.x += offsetX;
+      circle.y += offsetY;
+      ball.style.left = parseFloat(ball.style.left) + offsetX + "px";
+      ball.style.top = parseFloat(ball.style.top) + offsetY + "px";
+    }
+  }
 }
 
-function isRectanglesColliding(rect1, rect2) {
-  return (
-    rect1.right >= rect2.left &&
-    rect1.left <= rect2.right &&
-    rect1.bottom >= rect2.top &&
-    rect1.top <= rect2.bottom
-  );
+function isRectanglesColliding(circle, rect) {
+  const closestX = clamp(circle.x, rect.x, rect.x + rect.width);
+  const closestY = clamp(circle.y, rect.y, rect.y + rect.height);
+
+  const distanceX = circle.x - closestX;
+  const distanceY = circle.y - closestY;
+
+  const distanceSq = distanceX * distanceX + distanceY * distanceY;
+
+  // Check if the ball is inside the brick
+  const isInside =
+    circle.x > rect.x &&
+    circle.x < rect.x + rect.width &&
+    circle.y > rect.y &&
+    circle.y < rect.y + rect.height;
+
+  // Handle corner collisions
+  if (isInside) {
+    const leftDist = Math.abs(circle.x - rect.x);
+    const rightDist = Math.abs(circle.x - (rect.x + rect.width));
+    const topDist = Math.abs(circle.y - rect.y);
+    const bottomDist = Math.abs(circle.y - (rect.y + rect.height));
+
+    const minDistX = Math.min(leftDist, rightDist);
+    const minDistY = Math.min(topDist, bottomDist);
+
+    // Move the ball outside the brick
+    if (minDistX < minDistY) {
+      circle.x += minDistX * (leftDist < rightDist ? -1 : 1);
+    } else {
+      circle.y += minDistY * (topDist < bottomDist ? -1 : 1);
+    }
+
+    return true;
+  }
+
+  return distanceSq <= circle.radius * circle.radius;
+}
+
+// Helper function to clamp a value between min and max
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
 }
 
 function playSound(soundFile) {
@@ -541,7 +725,7 @@ function generatePowerup(x, y) {
   if (random() && !powerupExists) {
     gameScreenRect = gameScreen.getBoundingClientRect();
 
-    console.log(x, y);
+    // console.log(x, y);
 
     let powerup = document.createElement("div");
     powerup.classList.add("powerup" + randomNum());
@@ -621,7 +805,7 @@ function addScore() {
 function addTimer(time) {
   let currentTimer = parseInt(timer.innerHTML.split(" ")[1]);
   currentTimer = currentTimer + time;
-  timer.innerHTML = "Timer: " + currentTimer;
+  timer.innerHTML = "Time: " + currentTimer;
 }
 
 //adds 1 life to the player
@@ -638,8 +822,24 @@ function livesCounter() {
   currentLives--;
   lives.innerHTML = "Lives: " + currentLives;
   if (currentLives === 0) {
-    alert("Game over");
-    document.location.reload();
+    // alert("Game over");
+    document.getElementById("game-over-modal").style.display = "flex";
+    // document.location.reload();
+  }
+}
+
+function learnbrick() {
+  if (
+    document.getElementById("rude-h3").innerHTML ===
+    "You failed to save the world!!!"
+  ) {
+    window.location.href = "https://www.youtube.com/watch?v=IuuvNtC9P1o";
+  } else if (
+    document.getElementById("rude-h3").innerHTML === "You ran out of time!"
+  ) {
+    window.location.href = "https://www.youtube.com/watch?v=RA3jmrh6RMg";
+  } else {
+    window.location.href = "https://youtu.be/NMThdHhrLoM";
   }
 }
 
@@ -661,6 +861,9 @@ let startTime;
 
 // Timer function removes one second from timer
 function timerCounter() {
+  if (paused) {
+    return;
+  }
   const currentTime = Date.now();
   const elapsedTime = currentTime - startTime;
   const remainingTime = Math.max(
@@ -671,9 +874,12 @@ function timerCounter() {
   timer.innerHTML = "Time: " + remainingTime;
 
   if (remainingTime <= 0) {
-    clearInterval(timerInterval);
-    alert("Game over, ran out of time");
-    document.location.reload();
+    // change the content of the paragraph inside the modal
+    document.getElementById("rude-h3").innerHTML = "You ran out of time!";
+    document.getElementById("rude-text").innerHTML =
+      "Come back when you arent a lazy noob";
+    document.getElementById("nice").innerHTML = "Learn how to be a sigma";
+    document.getElementById("game-over-modal").style.display = "flex";
   }
 }
 
@@ -690,12 +896,6 @@ function sound(src) {
   let sound = new Audio("music/" + src);
   sound.play();
 }
-
-// make sure that the sound effects and music are loaded before the game starts
-// window.addEventListener("load", function () {
-//   sound("tap");
-//   sound("hit");
-// });
 
 function showLevel(level) {
   const levelModal = document.getElementById("level-modal");

@@ -3,6 +3,8 @@
   <head>
     <title>Brick Breaker Game</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="./images/bricks.png" type="image/x-icon" />
+    <!-- <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /> -->
   </head>
   <body>
     <div id="welcome">
@@ -263,13 +265,13 @@
     </div>
     <div id="game-over-modal" class="modal" style="display: none">
       <div class="modal-content">
-        <h1>Git gud kiddo</h1>
+        <h1 id="git-gud">Git gud kiddo</h1>
         <br />
-        <h3>You failed to save the world</h3>
-        <p>Learn how to play or uninstall</p>
+        <h3 id="rude-h3">You failed to save the world!!!</h3>
+        <p id="rude-text">Come back when you know how to break a brick</p>
         <div class="modal-buttons">
-          <button class="btn-101" id="restart-game-btn" onclick="restart()">
-            Restart
+          <button class="btn-101" id="nice" onclick="learnbrick()">
+            learn how to break a brick
             <svg>
               <defs>
                 <filter id="glow">

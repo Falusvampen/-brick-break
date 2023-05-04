@@ -56,11 +56,13 @@ function resume() {
   if (powerupExists) {
     movePowerup(document.getElementById("powerup"));
   }
+  timerInterval = clearInterval(timerInterval);
   startTimer();
 }
 
 function nextLevel() {
   removeAllBricks();
+  timerInterval = clearInterval(timerInterval);
   if (levelcount === levels.length) {
     paused = true;
     // clearInterval(timerInterval);
@@ -76,10 +78,10 @@ function nextLevel() {
     document.getElementById("game-over-modal").style.display = "flex";
   } else {
     // add 100 seconds to the timer element
+    console.log("I was here");
     addTimer(100);
-    clearInterval(timerInterval);
     if (powerupExists) {
-      document.getElementById("powerup").remove();
+      document.querySelectorAll("powerup").remove();
       powerupExists = false;
     }
 
@@ -99,7 +101,7 @@ function nextLevel() {
     // paused = true;
     ballReleased = false;
     holdball();
-    clearInterval(timerInterval);
+    // timerInterval = clearInterval(timerInterval);
 
     pause.addEventListener("click", rickroll);
 
@@ -342,7 +344,7 @@ const level10 = [
 //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 // ];
-// const level2 = [
+// const level1 = [
 //   [0, 0, 0, 0, 1, 0, 0, 0, 0],
 //   [0, 0, 0, 0, 1, 0, 0, 0, 0],
 //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -486,6 +488,7 @@ document.addEventListener("keydown", function (event) {
       if (!ballReleased) {
         ballReleased = true;
         moveBall();
+        timerInterval = clearInterval(timerInterval);
         startTimer();
       }
     }
@@ -513,6 +516,7 @@ function detectBallCollisions() {
   // Ball hits the bottom
   if (ballY >= gameScreen.offsetHeight - (ballRadius * 2 + 5)) {
     sound("yoda.mp3");
+    timerInterval = clearInterval(timerInterval);
     livesCounter();
     ballDirectionX = 1;
     ballDirectionY = -1;
@@ -803,9 +807,12 @@ function addScore() {
 
 //adds 10 seconds to timer
 function addTimer(time) {
+  timerInterval = clearInterval(timerInterval);
   let currentTimer = parseInt(timer.innerHTML.split(" ")[1]);
-  currentTimer = currentTimer + time;
+  currentTimer = currentTimer + +time;
   timer.innerHTML = "Time: " + currentTimer;
+  startTimer();
+  // console.log(currentTimer);
 }
 
 //adds 1 life to the player
@@ -819,13 +826,18 @@ function addOneLife() {
 function livesCounter() {
   // the lives counter is a string with a number in it "Lives: 3" so we need to split it and get the number
   let currentLives = parseInt(lives.innerHTML.split(" ")[1]);
-  currentLives--;
-  lives.innerHTML = "Lives: " + currentLives;
   if (currentLives === 0) {
     // alert("Game over");
+    moveBall();
+    ballReleased = false;
+    holdball();
+    paused = true;
     document.getElementById("game-over-modal").style.display = "flex";
     // document.location.reload();
   }
+  // timerInterval = clearInterval(timerInterval);
+  currentLives--;
+  lives.innerHTML = "Lives: " + currentLives;
 }
 
 function learnbrick() {
@@ -889,6 +901,7 @@ function startTimer() {
   startTime = Date.now();
 
   timerInterval = setInterval(timerCounter, 100);
+  // console.log("timerInterval:", timerInterval);
 }
 
 // Sound effects and music
